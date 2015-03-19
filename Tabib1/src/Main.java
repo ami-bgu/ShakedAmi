@@ -43,8 +43,8 @@ public class Main {
 		SubstitutionMatrix subsMat = new SubstitutionMatrix("Score.matrix");
 		Alignment alignment = new GlobalAlignment(subsMat);
 		//Alignment alignment = new LocalAlignment(subsMat);
-		//alignment.SetSequences(sequencesMap.get("sample2"), sequencesMap.get("sample1"));
-		alignment.SetSequences("TTAATT", "CCAACC");
+		alignment.SetSequences(sequencesMap.get("sample2"), sequencesMap.get("sample1"));
+		//alignment.SetSequences("TTAATT", "CCAACC");
 		System.out.println("Alignment score is: "+ alignment.getAlignmentScore());
 	
 	}
