@@ -1,8 +1,10 @@
+package edu.tabio.SequenceAlignments;
+import edu.tabio.Configuration.SubstitutionMatrix;
+
 
 public abstract class Alignment {
 
 	public Alignment(SubstitutionMatrix subsMat) {
-		// TODO Auto-generated constructor stub
 		this.sbm = subsMat;
 	}
 	
@@ -19,6 +21,7 @@ public abstract class Alignment {
 		mat = new int[a.length()+1][b.length()+1];
 	}
 	
+	protected abstract void fillMatrices();
 	public abstract int getAlignmentScore();
 	
 	

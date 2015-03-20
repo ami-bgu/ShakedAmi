@@ -1,3 +1,6 @@
+package edu.tabio.SequenceAlignments;
+import edu.tabio.Configuration.SubstitutionMatrix;
+
 
 public class LocalAlignment extends Alignment {
 
@@ -28,8 +31,16 @@ public class LocalAlignment extends Alignment {
 	
 	@Override
 	public int getAlignmentScore() {
+		fillMatrices();
+		return getMaxInMatrix(mat);
+	}
+
+	@Override
+	protected void fillMatrices() {
+		System.out.println("Filling mat using Local Alignment");
+
 		int a,b,c;
-			
+		
 		for (int i = 1; i < mat.length; i++) {
 			for (int j = 1; j < mat[0].length; j++) {
 				a = mat[i-1][j-1] + sbm.score(sequenceA.charAt(i), sequenceB.charAt(j));
@@ -38,8 +49,7 @@ public class LocalAlignment extends Alignment {
 				mat[i][j] = maxOutOfFour(a, b, c, 0);
 			}
 		}
-		
-		return getMaxInMatrix(mat);
+				
 	}
 
 }

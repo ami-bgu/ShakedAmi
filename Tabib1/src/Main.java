@@ -4,6 +4,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.tabio.Configuration.SubstitutionMatrix;
+import edu.tabio.SequenceAlignments.AffineGapGlobalAlignment;
+import edu.tabio.SequenceAlignments.Alignment;
+import edu.tabio.SequenceAlignments.GlobalAlignment;
+
 
 public class Main {
 
@@ -41,11 +46,14 @@ public class Main {
 		
 		readFasta("sequence.fasta");
 		SubstitutionMatrix subsMat = new SubstitutionMatrix("Score.matrix");
-		Alignment alignment = new GlobalAlignment(subsMat);
+		//Alignment alignment = new GlobalAlignment(subsMat);
 		//Alignment alignment = new LocalAlignment(subsMat);
+		Alignment alignment = new AffineGapGlobalAlignment(subsMat);
+
 		alignment.SetSequences(sequencesMap.get("sample2"), sequencesMap.get("sample1"));
 		//alignment.SetSequences("TTAATT", "CCAACC");
 		System.out.println("Alignment score is: "+ alignment.getAlignmentScore());
+		
 	
 	}
 }

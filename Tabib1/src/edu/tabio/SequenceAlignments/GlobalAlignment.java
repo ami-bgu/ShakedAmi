@@ -1,3 +1,6 @@
+package edu.tabio.SequenceAlignments;
+import edu.tabio.Configuration.SubstitutionMatrix;
+
 
 public class GlobalAlignment extends Alignment{
 
@@ -32,9 +35,17 @@ public class GlobalAlignment extends Alignment{
 	
 	@Override
 	public int getAlignmentScore() {
-			int a;
-			int b;
-			int c;
+		fillMatrices();
+		return Math.max(maxInCol(mat, mat[0].length-1), maxInRow(mat, mat.length-1));
+	}
+
+
+	@Override
+	protected void fillMatrices() {
+		System.out.println("Filling mat using Global Alignment");
+		int a;
+		int b;
+		int c;
 		for (int i = 1; i < mat.length; i++) {
 			for (int j = 1; j < mat[0].length; j++) {
 				a = mat[i-1][j-1] + sbm.score(sequenceA.charAt(i), sequenceB.charAt(j));
@@ -43,8 +54,7 @@ public class GlobalAlignment extends Alignment{
 				mat[i][j] = maxOutOfThree(a, b, c);
 			}
 		}
-		
-		return Math.max(maxInCol(mat, mat[0].length-1), maxInRow(mat, mat.length-1));
+	
 	}
 
 

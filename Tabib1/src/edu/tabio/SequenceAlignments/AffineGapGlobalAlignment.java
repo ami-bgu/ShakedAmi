@@ -1,7 +1,10 @@
+package edu.tabio.SequenceAlignments;
+import edu.tabio.Configuration.SubstitutionMatrix;
 
-public class AffineGapAlignment extends Alignment {
 
-	public AffineGapAlignment(SubstitutionMatrix subsMat) {
+public class AffineGapGlobalAlignment extends GlobalAlignment {
+
+	public AffineGapGlobalAlignment(SubstitutionMatrix subsMat) {
 		super(subsMat);
 	}
 
@@ -22,14 +25,18 @@ public class AffineGapAlignment extends Alignment {
 	protected int[][] I_s_mat;
 	protected int[][] I_r_mat;
 	
+
 	@Override
-	public int getAlignmentScore() {
+	protected void fillMatrices() {
+
+		System.out.println("Filling mat using Global Alignment + Affine Gap");
+
 		for (int i = 1; i < mat.length; i++) {
 			for (int j = 1; j < mat[0].length; j++) {
-				mat[i][j] = 	sbm.score(sequenceA.charAt(i), sequenceB.charAt(j)) + 
-									maxOutOfThree(	mat[i-1][j-1],
-													I_s_mat[i-1][j-1],
-													I_r_mat[i-1][j-1]);
+				mat[i][j] = sbm.score(sequenceA.charAt(i), sequenceB.charAt(j)) + 
+								maxOutOfThree(	mat[i-1][j-1],
+												I_s_mat[i-1][j-1],
+												I_r_mat[i-1][j-1]);
 				I_s_mat[i][j] = maxOutOfThree(	mat[i-1][j] - sbm.getAffineGap_A(),
 												I_s_mat[i-1][j]- sbm.getAffineGap_B(),
 												I_r_mat[i-1][j]- sbm.getAffineGap_A());
@@ -39,8 +46,6 @@ public class AffineGapAlignment extends Alignment {
 			}
 		}
 		
-		//TODO: Connect this method!!!!!!!!!!!
-		return 0;
 	}
 
 }
