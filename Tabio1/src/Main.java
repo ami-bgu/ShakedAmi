@@ -8,6 +8,7 @@ import edu.tabio.Configuration.SubstitutionMatrix;
 import edu.tabio.SequenceAlignments.AffineGapGlobalAlignment;
 import edu.tabio.SequenceAlignments.Alignment;
 import edu.tabio.SequenceAlignments.GlobalAlignment;
+import edu.tabio.SequenceAlignments.LocalAlignment;
 
 
 public class Main {
@@ -43,12 +44,19 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
+		if (args.length==0)
+		{
+			System.err.println("please provide args!");
+			return;
+		}
 		
 		readFasta("sequence.fasta");
 		SubstitutionMatrix subsMat = new SubstitutionMatrix("Score.matrix");
-		//Alignment alignment = new GlobalAlignment(subsMat);
-		//Alignment alignment = new LocalAlignment(subsMat);
-		Alignment alignment = new AffineGapGlobalAlignment(subsMat);
+		Alignment alignment = null;
+		
+		if (args.length>1 && args[1].equals("-a"))	alignment = new AffineGapGlobalAlignment(subsMat);
+		else if (args[0].equals("-g"))				alignment = new GlobalAlignment(subsMat);
+		else if (args[0].equals("-l"))				alignment = new LocalAlignment(subsMat);
 
 		alignment.SetSequences(sequencesMap.get("sample2"), sequencesMap.get("sample1"));
 		//alignment.SetSequences("TTAATT", "CCAACC");
