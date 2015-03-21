@@ -75,8 +75,8 @@ public class GlobalAlignment extends Alignment{
 				arr[1] = mat[i-1][j].getValue() +  sbm.score(sequenceA.charAt(i), ' ');
 				arr[2] = mat[i-1][j-1].getValue() + sbm.score(sequenceA.charAt(i), sequenceB.charAt(j));
 				int index = maxIndexInArray(arr);
-				if		( index == 0) mat[i][j] = new Cell(arr[index], mat[i][j-1], " " , sequenceB.charAt(j)+"");
-				else if	( index == 1) mat[i][j] = new Cell(arr[index], mat[i-1][j], sequenceA.charAt(i)+"" , " ");
+				if		( index == 0) mat[i][j] = new Cell(arr[index], mat[i][j-1], "_" , sequenceB.charAt(j)+"");
+				else if	( index == 1) mat[i][j] = new Cell(arr[index], mat[i-1][j], sequenceA.charAt(i)+"" , "_");
 				else if	( index == 2) mat[i][j] = new Cell(arr[index], mat[i-1][j-1], sequenceA.charAt(i)+"" , sequenceB.charAt(j)+"");
 
 				//System.out.println("i:"+i+" j:"+j+";");

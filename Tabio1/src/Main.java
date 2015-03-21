@@ -61,8 +61,8 @@ public class Main {
 		 */
 		alignment = new GlobalAlignment(subsMat);
 		
-		alignment.SetSequences(sequencesMap.get("sample2"), sequencesMap.get("sample1"));
-		//alignment.SetSequences("TTAATT", "CCAACC");
+		//alignment.SetSequences(sequencesMap.get("sample2"), sequencesMap.get("sample1"));
+		alignment.SetSequences("AATT", "CCAA");
 		//System.out.println("Alignment score is: "+ alignment.getAlignmentScore());
 		alignment.printResult();
 		
