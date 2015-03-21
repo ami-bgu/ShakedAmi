@@ -30,7 +30,7 @@ public class LocalAlignment extends Alignment {
 	}
 	
 	@Override
-	public int getAlignmentScore() {
+	public int printResult() {
 		fillMatrices();
 		return getMaxInMatrix(mat);
 	}
