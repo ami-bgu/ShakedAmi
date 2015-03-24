@@ -32,6 +32,30 @@ public abstract class Alignment {
 	}
 	
 	
+	protected int maxIndexInArray(int[] arr){
+		int max = arr[0];
+		int index = 0;
+		for (int i = 1; i < arr.length; i++) {
+			if(arr[i]>max){
+				index = i;
+				max = arr[i];
+			}
+		}
+		return index;
+	}
+	
+	protected Cell maxCellInArray(Cell[] arr){
+		int max = arr[0].getValue();
+		Cell c = arr[0];
+		for (int i = 1; i < arr.length; i++) {
+			if(arr[i].getValue()>max){
+				max = arr[i].getValue();
+				c = arr[i];
+			}
+		}
+		return c;
+	}
+	
 	protected abstract void fillMatrices();
 	public abstract void printResult();
 	

@@ -9,6 +9,7 @@ public class Cell {
 		this.s2 = s2;
 	}
 	
+	//start cell
 	public Cell() {
 		this.value = 0;
 		this.prevCell = null;

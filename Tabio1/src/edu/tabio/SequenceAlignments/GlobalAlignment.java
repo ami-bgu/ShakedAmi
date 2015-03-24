@@ -16,7 +16,7 @@ public class GlobalAlignment extends Alignment{
 		Cell c= mat[i][0];
 		for (int j = 1; j < matrix[0].length; j++) {
 			if(mat[i][j].getValue() > max){
-				max = Math.max(mat[i][j].getValue(), max);
+				max = mat[i][j].getValue();
 				c = mat[i][j];
 			}
 		}
@@ -28,24 +28,14 @@ public class GlobalAlignment extends Alignment{
 		Cell c= mat[0][j];
 		for (int i = 1; i < matrix.length; i++) {
 			if (mat[i][j].getValue() > max){
-				max = Math.max(mat[i][j].getValue(), max);
+				max = mat[i][j].getValue();
 				c = mat[i][j];
 			}
 		}
 		return c;
 	}
 	
-	private int maxIndexInArray(int[] arr){
-		int max = arr[0];
-		int index = 0;
-		for (int i = 1; i < arr.length; i++) {
-			if(arr[i]>max){
-				index = i;
-				max = arr[i];
-			}
-		}
-		return index;
-	}
+
 	
 	@Override
 	public void printResult() {

@@ -54,15 +54,15 @@ public class Main {
 		SubstitutionMatrix subsMat = new SubstitutionMatrix("Score.matrix");
 		Alignment alignment = null;
 		
-		/*
+		
 		if (args.length>1 && args[1].equals("-a"))	alignment = new AffineGapGlobalAlignment(subsMat);
 		else if (args[0].equals("-g"))				alignment = new GlobalAlignment(subsMat);
 		else if (args[0].equals("-l"))				alignment = new LocalAlignment(subsMat);
-		 */
-		alignment = new GlobalAlignment(subsMat);
+		 
+		//alignment = new GlobalAlignment(subsMat);
 		
 		//alignment.SetSequences(sequencesMap.get("sample2"), sequencesMap.get("sample1"));
-		alignment.SetSequences("AATT", "CCAA");
+		alignment.SetSequences("AAAAAGGGGGGGGGGGGGGGGGGGGGGGGGG", "CCAAAAACCCCCCCCCCGGGGGGGGGGGGGGGGGGGGGGGGGG");
 		//System.out.println("Alignment score is: "+ alignment.getAlignmentScore());
 		alignment.printResult();
 		
