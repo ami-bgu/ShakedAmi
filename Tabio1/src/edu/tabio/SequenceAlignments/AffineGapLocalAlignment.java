@@ -2,9 +2,9 @@ package edu.tabio.SequenceAlignments;
 import edu.tabio.Configuration.SubstitutionMatrix;
 
 
-public class AffineGapGlobalAlignment extends GlobalAlignment {
+public class AffineGapLocalAlignment extends GlobalAlignment {
 
-	public AffineGapGlobalAlignment(SubstitutionMatrix subsMat) {
+	public AffineGapLocalAlignment(SubstitutionMatrix subsMat) {
 		super(subsMat);
 	}
 	
@@ -35,8 +35,9 @@ public class AffineGapGlobalAlignment extends GlobalAlignment {
 	@Override
 	protected void fillMatrices() {
 
-		System.out.println("Filling mat using Global Alignment + Affine Gap");
-		int[] arr = new int[3];
+		System.out.println("Filling mat using Local Alignment + Affine Gap");
+		int[] arr = new int[4];
+		arr[3]=0;
 
 		for (int i = 1; i < mat.length; i++) {
 			for (int j = 1; j < mat[0].length; j++) {
@@ -49,7 +50,9 @@ public class AffineGapGlobalAlignment extends GlobalAlignment {
 				if		( index == 0) mat[i][j] = new Cell(score, mat[i-1][j-1], sequenceA.charAt(i)+"" , sequenceB.charAt(j)+"");
 				else if	( index == 1) mat[i][j] = new Cell(score, I_s_mat[i-1][j-1], sequenceA.charAt(i)+"" , sequenceB.charAt(j)+"");
 				else if	( index == 2) mat[i][j] = new Cell(score, I_r_mat[i-1][j-1], sequenceA.charAt(i)+"" , sequenceB.charAt(j)+"");
-		
+				else if	( index == 3) mat[i][j] = new Cell();
+				
+				
 				arr[0] = mat[i-1][j].getValue() - sbm.getAffineGap_A();
 				arr[1] = I_s_mat[i-1][j].getValue() - sbm.getAffineGap_B();
 				arr[2] = I_r_mat[i-1][j].getValue() - sbm.getAffineGap_A();			
@@ -58,6 +61,8 @@ public class AffineGapGlobalAlignment extends GlobalAlignment {
 				if		( index == 0) I_s_mat[i][j] = new Cell(score, mat[i-1][j], sequenceA.charAt(i)+"" , "_");
 				else if	( index == 1) I_s_mat[i][j] = new Cell(score, I_s_mat[i-1][j], sequenceA.charAt(i)+"" , "_");
 				else if	( index == 2) I_s_mat[i][j] = new Cell(score, I_r_mat[i-1][j], sequenceA.charAt(i)+"" , "_");
+				else if	( index == 3) I_s_mat[i][j] = new Cell();
+
 
 				arr[0] = mat[i][j-1].getValue() - sbm.getAffineGap_A();
 				arr[1] = I_s_mat[i][j-1].getValue() - sbm.getAffineGap_A();
@@ -67,6 +72,8 @@ public class AffineGapGlobalAlignment extends GlobalAlignment {
 				if		( index == 0) I_r_mat[i][j] = new Cell(score, mat[i][j-1], "_" , sequenceB.charAt(j)+"");
 				else if	( index == 1) I_r_mat[i][j] = new Cell(score, I_s_mat[i][j-1], "_" , sequenceB.charAt(j)+"");
 				else if	( index == 2) I_r_mat[i][j] = new Cell(score, I_r_mat[i][j-1], "_" , sequenceB.charAt(j)+"");
+				else if	( index == 3) I_r_mat[i][j] = new Cell();
+
 
 			}
 		}

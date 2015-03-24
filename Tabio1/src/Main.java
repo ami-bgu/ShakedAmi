@@ -6,6 +6,7 @@ import java.util.Map;
 
 import edu.tabio.Configuration.SubstitutionMatrix;
 import edu.tabio.SequenceAlignments.AffineGapGlobalAlignment;
+import edu.tabio.SequenceAlignments.AffineGapLocalAlignment;
 import edu.tabio.SequenceAlignments.Alignment;
 import edu.tabio.SequenceAlignments.GlobalAlignment;
 import edu.tabio.SequenceAlignments.LocalAlignment;
@@ -13,10 +14,11 @@ import edu.tabio.SequenceAlignments.LocalAlignment;
 
 public class Main {
 
-	public static Map<String, String> sequencesMap = new HashMap<>();
+	//public static Map<String, String> sequencesMap = new HashMap<>();
 	
-	public static void readFasta(String filename)
+	public static Map<String, String> readFasta(String filename)
 	{
+		Map<String, String> sequencesMap = new HashMap<>();
 		String key = "";
 		StringBuilder builder = new StringBuilder();
 		//
@@ -40,7 +42,24 @@ public class Main {
 		}
 
 		//System.out.println(sequencesMap);
+		return sequencesMap;
 	
+	}
+	
+	
+	public static void allAgainstAll() {
+		long startTime = System.currentTimeMillis();
+		SubstitutionMatrix subsMat = new SubstitutionMatrix("Score.matrix");
+		Map<String, String> map1 = readFasta("sequence.fasta");
+		Map<String, String> map2 = readFasta("sequence.fasta");
+		Alignment alignment = new AffineGapLocalAlignment(subsMat);
+		for (String value1 : map1.values()) {
+			for (String value2 : map2.values()) {
+				alignment.SetSequences(value1, value2);
+				alignment.printResult();
+			}
+		}
+		System.out.println("It took: "+ (System.currentTimeMillis() - startTime));
 	}
 	
 	public static void main(String[] args) {
@@ -49,24 +68,29 @@ public class Main {
 			System.err.println("please provide args!");
 			return;
 		}
+		allAgainstAll();
+
+		/*
 		
-		readFasta("sequence.fasta");
 		SubstitutionMatrix subsMat = new SubstitutionMatrix("Score.matrix");
 		Alignment alignment = null;
 		
 		
-		if (args.length>1 && args[1].equals("-a"))	alignment = new AffineGapGlobalAlignment(subsMat);
+		if (args.length>1 && args[1].equals("-a")){
+			if 		(args[0].equals("-g"))		alignment = new AffineGapGlobalAlignment(subsMat);
+			else if (args[0].equals("-l"))		alignment = new AffineGapLocalAlignment(subsMat);
+		}
 		else if (args[0].equals("-g"))				alignment = new GlobalAlignment(subsMat);
 		else if (args[0].equals("-l"))				alignment = new LocalAlignment(subsMat);
 		 
 		//alignment = new GlobalAlignment(subsMat);
 		
-		//alignment.SetSequences(sequencesMap.get("sample2"), sequencesMap.get("sample1"));
-		alignment.SetSequences("AAAAAGGGGGGGGGGGGGGGGGGGGGGGGGG", "CCAAAAACCCCCCCCCCGGGGGGGGGGGGGGGGGGGGGGGGGG");
+		alignment.SetSequences(sequencesMap.get("sample2"), sequencesMap.get("sample1"));
+		//alignment.SetSequences(	"","");
 		//System.out.println("Alignment score is: "+ alignment.getAlignmentScore());
 		alignment.printResult();
 		
-		
+		*/
 	
 	}
 }
