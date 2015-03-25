@@ -41,10 +41,10 @@ public class Main {
 		}
 		
 		SequenceAligner aligner = new SequenceAligner(alignment);
-		//aligner.allAgainstAll(fastas[0], fastas[1]);
-		
+		aligner.allAgainstAll(fastas[0], fastas[1]);
+		/*
 		aligner.oneAgainstOne(	"GCTTATACCA",
 								"TCCCGTTAGAACAA");
-		 
+		 */
 	}
 }
