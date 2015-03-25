@@ -1,5 +1,6 @@
 package edu.tabio.SequenceAlignments;
 import edu.tabio.Configuration.SubstitutionMatrix;
+import edu.tabio.Model.Sequence;
 
 
 public class AffineGapGlobalAlignment extends GlobalAlignment {
@@ -9,8 +10,10 @@ public class AffineGapGlobalAlignment extends GlobalAlignment {
 	}
 	
 	@Override
-	public void SetSequences(String a, String b) {
-		super.SetSequences(a, b);
+	public void SetSequences(Sequence seq1, Sequence seq2){
+		super.SetSequences(seq1, seq2);
+		String b = seq1.getContent();
+		String a = seq2.getContent();
 		I_s_mat = new Cell[a.length()+1][b.length()+1];
 		I_r_mat = new Cell[a.length()+1][b.length()+1];
 		
@@ -31,46 +34,38 @@ public class AffineGapGlobalAlignment extends GlobalAlignment {
 	protected Cell[][] I_s_mat;
 	protected Cell[][] I_r_mat;
 	
-
+	private int[] arr = new int[3];
+	
 	@Override
-	protected void fillMatrices() {
+	protected void ij_operation(int i, int j) {
+		int score = sbm.score(sequenceA.charAt(i), sequenceB.charAt(j));
+		arr[0] = mat[i-1][j-1].getValue();
+		arr[1] = I_s_mat[i-1][j-1].getValue();
+		arr[2] = I_r_mat[i-1][j-1].getValue();			
+		int index = maxIndexInArray(arr);
+		score += arr[index];
+		if		( index == 0) mat[i][j] = new Cell(score, mat[i-1][j-1], sequenceA.charAt(i)+"" , sequenceB.charAt(j)+"");
+		else if	( index == 1) mat[i][j] = new Cell(score, I_s_mat[i-1][j-1], sequenceA.charAt(i)+"" , sequenceB.charAt(j)+"");
+		else if	( index == 2) mat[i][j] = new Cell(score, I_r_mat[i-1][j-1], sequenceA.charAt(i)+"" , sequenceB.charAt(j)+"");
 
-		System.out.println("Filling mat using Global Alignment + Affine Gap");
-		int[] arr = new int[3];
+		arr[0] = mat[i-1][j].getValue() - sbm.getAffineGap_A();
+		arr[1] = I_s_mat[i-1][j].getValue() - sbm.getAffineGap_B();
+		arr[2] = I_r_mat[i-1][j].getValue() - sbm.getAffineGap_A();			
+		index = maxIndexInArray(arr);
+		score = arr[index];
+		if		( index == 0) I_s_mat[i][j] = new Cell(score, mat[i-1][j], sequenceA.charAt(i)+"" , "_");
+		else if	( index == 1) I_s_mat[i][j] = new Cell(score, I_s_mat[i-1][j], sequenceA.charAt(i)+"" , "_");
+		else if	( index == 2) I_s_mat[i][j] = new Cell(score, I_r_mat[i-1][j], sequenceA.charAt(i)+"" , "_");
 
-		for (int i = 1; i < mat.length; i++) {
-			for (int j = 1; j < mat[0].length; j++) {
-				int score = sbm.score(sequenceA.charAt(i), sequenceB.charAt(j));
-				arr[0] = mat[i-1][j-1].getValue();
-				arr[1] = I_s_mat[i-1][j-1].getValue();
-				arr[2] = I_r_mat[i-1][j-1].getValue();			
-				int index = maxIndexInArray(arr);
-				score+=arr[index];
-				if		( index == 0) mat[i][j] = new Cell(score, mat[i-1][j-1], sequenceA.charAt(i)+"" , sequenceB.charAt(j)+"");
-				else if	( index == 1) mat[i][j] = new Cell(score, I_s_mat[i-1][j-1], sequenceA.charAt(i)+"" , sequenceB.charAt(j)+"");
-				else if	( index == 2) mat[i][j] = new Cell(score, I_r_mat[i-1][j-1], sequenceA.charAt(i)+"" , sequenceB.charAt(j)+"");
-		
-				arr[0] = mat[i-1][j].getValue() - sbm.getAffineGap_A();
-				arr[1] = I_s_mat[i-1][j].getValue() - sbm.getAffineGap_B();
-				arr[2] = I_r_mat[i-1][j].getValue() - sbm.getAffineGap_A();			
-				index = maxIndexInArray(arr);
-				score = arr[index];
-				if		( index == 0) I_s_mat[i][j] = new Cell(score, mat[i-1][j], sequenceA.charAt(i)+"" , "_");
-				else if	( index == 1) I_s_mat[i][j] = new Cell(score, I_s_mat[i-1][j], sequenceA.charAt(i)+"" , "_");
-				else if	( index == 2) I_s_mat[i][j] = new Cell(score, I_r_mat[i-1][j], sequenceA.charAt(i)+"" , "_");
+		arr[0] = mat[i][j-1].getValue() - sbm.getAffineGap_A();
+		arr[1] = I_s_mat[i][j-1].getValue() - sbm.getAffineGap_A();
+		arr[2] = I_r_mat[i][j-1].getValue() - sbm.getAffineGap_B();			
+		index = maxIndexInArray(arr);
+		score = arr[index];
+		if		( index == 0) I_r_mat[i][j] = new Cell(score, mat[i][j-1], "_" , sequenceB.charAt(j)+"");
+		else if	( index == 1) I_r_mat[i][j] = new Cell(score, I_s_mat[i][j-1], "_" , sequenceB.charAt(j)+"");
+		else if	( index == 2) I_r_mat[i][j] = new Cell(score, I_r_mat[i][j-1], "_" , sequenceB.charAt(j)+"");
 
-				arr[0] = mat[i][j-1].getValue() - sbm.getAffineGap_A();
-				arr[1] = I_s_mat[i][j-1].getValue() - sbm.getAffineGap_A();
-				arr[2] = I_r_mat[i][j-1].getValue() - sbm.getAffineGap_B();			
-				index = maxIndexInArray(arr);
-				score = arr[index];
-				if		( index == 0) I_r_mat[i][j] = new Cell(score, mat[i][j-1], "_" , sequenceB.charAt(j)+"");
-				else if	( index == 1) I_r_mat[i][j] = new Cell(score, I_s_mat[i][j-1], "_" , sequenceB.charAt(j)+"");
-				else if	( index == 2) I_r_mat[i][j] = new Cell(score, I_r_mat[i][j-1], "_" , sequenceB.charAt(j)+"");
-
-			}
-		}
-		
 	}
 
 }

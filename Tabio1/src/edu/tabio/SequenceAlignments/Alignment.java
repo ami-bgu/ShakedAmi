@@ -1,21 +1,31 @@
 package edu.tabio.SequenceAlignments;
 import edu.tabio.Configuration.SubstitutionMatrix;
+import edu.tabio.Model.Sequence;
 
 
 public abstract class Alignment {
 
 	public Alignment(SubstitutionMatrix subsMat) {
 		this.sbm = subsMat;
+		System.out.println(this.getClass().getSimpleName()+" initiated!");
 	}
 	
 	protected SubstitutionMatrix sbm;
-	protected String sequenceA;
-	protected String sequenceB;
+	protected String sequenceA;	//vertical sequence
+	protected String sequenceB;	//horizontal sequence
 	
+	private String seqA_name;
+	private String seqB_name;
+		
 	protected Cell[][] mat;
 	
-	public void SetSequences(String a, String b)
+	public void SetSequences(Sequence seq1, Sequence seq2)
 	{
+		//on purpose 1=b 2=a
+		seqA_name = seq2.getName();
+		seqB_name = seq1.getName();
+		String b = seq1.getContent();
+		String a = seq2.getContent();
 		this.sequenceA = "#"+a;
 		this.sequenceB = "#"+b;
 		mat = new Cell[a.length()+1][b.length()+1];
@@ -56,8 +66,34 @@ public abstract class Alignment {
 		return c;
 	}
 	
-	protected abstract void fillMatrices();
-	public abstract void printResult();
+	protected void fillMatrices()
+	{
+		for (int i = 1; i < mat.length; i++) {
+			for (int j = 1; j < mat[0].length; j++) {
+				ij_operation(i, j);
+			}
+		}
+	}
+	
+	protected abstract Cell calculateEndCell();
+	protected abstract void ij_operation(int i, int j);
+
+	
+	
+	public void printResult()
+	{
+		fillMatrices();
+		String[] algn;
+		Cell c = calculateEndCell();
+		algn = c.alignment();
+		StringBuilder builder = new StringBuilder();
+		builder.append(">"+seqB_name+"\n");
+		builder.append(algn[1]+"\n");
+		builder.append(">"+seqA_name+"\n");
+		builder.append(algn[0]+"\n");
+		builder.append("Score: "+c.getValue()+"\n");
+		System.out.println(builder.toString());
+	}
 	
 	protected void printMat()
 	{

@@ -2,8 +2,6 @@ package edu.tabio.Configuration;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class SubstitutionMatrix {
@@ -70,10 +68,10 @@ public class SubstitutionMatrix {
 			case 'T':	return T;
 			case 'C':	return C;
 			case 'G':	return G;
+			case 'U':	return U;
 			case ' ':	return BLANK;
+			default:	return N;
 		}
-		System.err.println("Unknow letter!");
-		return -1;
 	}
 	
 	public int score(char letter1, char letter2) {
