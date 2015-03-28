@@ -19,6 +19,7 @@ public abstract class Alignment {
 		
 	protected Cell[][] mat;
 	
+	//set sequences to be aligned
 	public void SetSequences(Sequence seq1, Sequence seq2)
 	{
 		//on purpose 1=b 2=a
@@ -41,7 +42,7 @@ public abstract class Alignment {
 		
 	}
 	
-	
+	//returns the index of the maximum cell in the array
 	protected int maxIndexInArray(int[] arr){
 		int max = arr[0];
 		int index = 0;
@@ -54,6 +55,7 @@ public abstract class Alignment {
 		return index;
 	}
 	
+	/*
 	protected Cell maxCellInArray(Cell[] arr){
 		int max = arr[0].getValue();
 		Cell c = arr[0];
@@ -65,7 +67,9 @@ public abstract class Alignment {
 		}
 		return c;
 	}
+	*/
 	
+	//fills the main matrix according to the alignment algorithm
 	protected void fillMatrices()
 	{
 		for (int i = 1; i < mat.length; i++) {
@@ -75,11 +79,11 @@ public abstract class Alignment {
 		}
 	}
 	
-	protected abstract Cell calculateEndCell();
-	protected abstract void ij_operation(int i, int j);
+	protected abstract Cell calculateEndCell();		//returns the last cell of the alignment's path 
+	protected abstract void ij_operation(int i, int j);	//returns the maximum value for the cell [i,j]
 
 	
-	
+	//prints the sequences names, alignment & score
 	public void printResult()
 	{
 		fillMatrices();
@@ -95,6 +99,7 @@ public abstract class Alignment {
 		System.out.println(builder.toString());
 	}
 	
+	//prints the alignment matrix (for debugging purposes)
 	protected void printMat()
 	{
 		for (int i = 0; i < mat.length; i++) {
@@ -103,8 +108,6 @@ public abstract class Alignment {
 			}
 			System.out.println();
 		}
-		System.out.println("-----------------------------------------");
-		
+		System.out.println("-----------------------------------------");		
 	}
-	
 }
