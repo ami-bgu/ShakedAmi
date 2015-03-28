@@ -52,7 +52,8 @@ public class AffineGapLocalAlignment extends LocalAlignment {
 		
 		
 		arr[0] = mat[i-1][j].getValue() - sbm.getAffineGap_A();
-		arr[1] = I_s_mat[i-1][j].getValue() - sbm.getAffineGap_B();
+		if (i==1)	arr[1] = I_s_mat[i-1][j].getValue() - sbm.getAffineGap_A();
+		else		arr[1] = I_s_mat[i-1][j].getValue() - sbm.getAffineGap_B();
 		arr[2] = I_r_mat[i-1][j].getValue() - sbm.getAffineGap_A();			
 		index = maxIndexInArray(arr);
 		score = arr[index];
@@ -64,7 +65,8 @@ public class AffineGapLocalAlignment extends LocalAlignment {
 
 		arr[0] = mat[i][j-1].getValue() - sbm.getAffineGap_A();
 		arr[1] = I_s_mat[i][j-1].getValue() - sbm.getAffineGap_A();
-		arr[2] = I_r_mat[i][j-1].getValue() - sbm.getAffineGap_B();			
+		if (j==1)	arr[2] = I_r_mat[i][j-1].getValue() - sbm.getAffineGap_A();	
+		else		arr[2] = I_r_mat[i][j-1].getValue() - sbm.getAffineGap_B();
 		index = maxIndexInArray(arr);
 		score = arr[index];
 		if		( index == 0) I_r_mat[i][j] = new Cell(score, mat[i][j-1], "_" , sequenceB.charAt(j)+"");
