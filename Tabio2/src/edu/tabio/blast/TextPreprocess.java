@@ -13,7 +13,7 @@ public class TextPreprocess {
 
 	}
 
-	private Map<String,List<Integer>> textMap = new HashMap<>();
+	protected Map<String,List<Integer>> textMap = new HashMap<>();
 
 	public void preprocess(String text)
 	{

@@ -10,10 +10,7 @@ import edu.tabio.Configuration.SubstitutionMatrix;
 
 public class QueryPreprocess {
 	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
-	}
 
 	private SubstitutionMatrix sbm;
 	
@@ -21,28 +18,42 @@ public class QueryPreprocess {
 		this.sbm = subsMat;
 	}
 	
-	private Map<String,List<SimilarString>> similarWordsMap = new HashMap<>();
+	protected Map<String,List<SimilarString>> similarWordsMap = new HashMap<>();
 
 	public void preprocess(String query, TextPreprocess textPreprocess)
 	{
 		Set<String> textKBlocks = textPreprocess.getKBlocksList();
 		for (int i = 0; i < query.length()-BlastConstants.K + 1 ; i++) {
 			String queryBlock = query.substring(i, i + BlastConstants.K);
-			for (String textBlock : textKBlocks) {
-				Integer similarity =  sbm.similarity(queryBlock, textBlock, BlastConstants.T);
-				if (similarity != null){
-					List<SimilarString> wordList = similarWordsMap.get(queryBlock);
-					if(wordList == null){
-						wordList = new ArrayList<>();
-						similarWordsMap.put(queryBlock, wordList);
-					}
-					wordList.add(new SimilarString(textBlock, similarity));
-				}			
+			List<SimilarString> wordList = similarWordsMap.get(queryBlock);
+			if(wordList == null)
+			{
+				wordList = new ArrayList<>(); //create a list of similar word if it doesnt exist
+				for (String textBlock : textKBlocks) {
+					Integer similarity =  sbm.similarity(queryBlock, textBlock, BlastConstants.T);
+					if (similarity != null){
+						wordList.add(new SimilarString(textBlock, similarity, textPreprocess.textMap.get(textBlock))); //add to the similar words list
+					}			
+				}
+				if(!wordList.isEmpty()) similarWordsMap.put(queryBlock, wordList);
 			}
 		}
-
+		printMap();
+		System.exit(0);
 	}
 	
+	
+	private void printMap(){
+		for (String word : similarWordsMap.keySet()) {
+			List<SimilarString> similarWordsList = similarWordsMap.get(word);
+			System.out.println(word + similarWordsList.toString());
+			
+			
+		}
+		
+		
+		
+	}
 	
 	
 	

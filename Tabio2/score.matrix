@@ -1,0 +1,15 @@
+# RNA / DNA 
+#
+# Uses ambiguous nucleotide codes, probabilities rounded to
+#  nearest integer
+#
+# Lowest score = -4, Highest score = 5
+#
+    A   T   G   C   U   N   _
+A   5  -4  -4  -4  -4   5  -3
+T  -4   5  -4  -4   5   5  -3
+G  -4  -4   5  -4  -4   5  -3
+C  -4  -4  -4   5  -4   5  -3
+U  -4   5  -4  -4   5   5  -3
+N   5   5   5   5   5   5  -3
+_  -3  -3  -3  -3  -3  -3  -3

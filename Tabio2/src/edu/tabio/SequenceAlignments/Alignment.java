@@ -54,20 +54,7 @@ public abstract class Alignment {
 		}
 		return index;
 	}
-	
-	/*
-	protected Cell maxCellInArray(Cell[] arr){
-		int max = arr[0].getValue();
-		Cell c = arr[0];
-		for (int i = 1; i < arr.length; i++) {
-			if(arr[i].getValue()>max){
-				max = arr[i].getValue();
-				c = arr[i];
-			}
-		}
-		return c;
-	}
-	*/
+
 	
 	//fills the main matrix according to the alignment algorithm
 	protected void fillMatrices()

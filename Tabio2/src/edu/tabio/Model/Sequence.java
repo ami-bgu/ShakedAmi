@@ -4,7 +4,7 @@ public class Sequence {
 		
 	public Sequence(String name, String content) {
 		this.name = name;
-		this.content = content;
+		this.content = content.toUpperCase();
 	}
 	
 	private String name;
