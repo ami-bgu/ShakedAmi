@@ -18,35 +18,39 @@ public class QueryPreprocess {
 		this.sbm = subsMat;
 	}
 	
-	protected Map<String,List<SimilarString>> similarWordsMap = new HashMap<>();
+	protected Map<String,SimilarsAndIndexes> similarWordsMap = new HashMap<>();
 
 	public void preprocess(String query, TextPreprocess textPreprocess)
 	{
 		Set<String> textKBlocks = textPreprocess.getKBlocksList();
 		for (int i = 0; i < query.length()-BlastConstants.K + 1 ; i++) {
 			String queryBlock = query.substring(i, i + BlastConstants.K);
-			List<SimilarString> wordList = similarWordsMap.get(queryBlock);
-			if(wordList == null)
-			{
-				wordList = new ArrayList<>(); //create a list of similar word if it doesnt exist
+			SimilarsAndIndexes queryWord = similarWordsMap.get(queryBlock);
+			if(queryWord == null){
+				queryWord = new SimilarsAndIndexes();
+				List<SimilarString> wordList = queryWord.getSimilarStrings();
 				for (String textBlock : textKBlocks) {
 					Integer similarity =  sbm.similarity(queryBlock, textBlock, BlastConstants.T);
 					if (similarity != null){
 						wordList.add(new SimilarString(textBlock, similarity, textPreprocess.textMap.get(textBlock))); //add to the similar words list
 					}			
 				}
-				if(!wordList.isEmpty()) similarWordsMap.put(queryBlock, wordList);
+				similarWordsMap.put(queryBlock , queryWord);
 			}
+			
+			queryWord.addQueryIndexes(i);
+			
+			
 		}
 		printMap();
-		System.exit(0);
+		//System.exit(0);
 	}
 	
 	
 	private void printMap(){
 		for (String word : similarWordsMap.keySet()) {
-			List<SimilarString> similarWordsList = similarWordsMap.get(word);
-			System.out.println(word + similarWordsList.toString());
+			SimilarsAndIndexes similarWordsList = similarWordsMap.get(word);
+			System.out.println("Word in query: " + word + ", " + similarWordsList.toString());
 			
 			
 		}

@@ -18,7 +18,15 @@ public class SimilarString {
 	
 	@Override
 	public String toString() {
-		return "\t"+str+ ", punishment: " + punishment +  ", List: " + indexesInText+"\n";
+		return "\n\t"+str+ ", punishment: " + punishment +  ", indexes: " + indexesInText;
 		//return str+", ";
+	}
+
+	public List<Integer> getIndexesInText() {
+		return indexesInText;
+	}
+
+	public int getPunishment() {
+		return punishment;
 	}
 }
