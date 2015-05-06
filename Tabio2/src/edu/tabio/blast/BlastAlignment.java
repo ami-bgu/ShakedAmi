@@ -1,68 +1,67 @@
 package edu.tabio.blast;
 
 import edu.tabio.Configuration.SubstitutionMatrix;
+import edu.tabio.Model.BlastResult;
 import edu.tabio.Model.Sequence;
-import edu.tabio.SequenceAlignments.Alignment;
-import edu.tabio.SequenceAlignments.Cell;
 
-public class BlastAlignment extends Alignment{
+
+public class BlastAlignment{
 
 	public BlastAlignment(SubstitutionMatrix subsMat) {
-		super(subsMat);
+		this.sbm = subsMat;
 	}
 	
-	@Override
-	public void SetSequences(Sequence text, Sequence query)
+	protected SubstitutionMatrix sbm;
+
+	protected Sequence m_text;
+	protected Sequence m_query;
+	
+	
+	public void setText(Sequence text)
 	{
-		super.SetSequences(text, query);
+		this.m_text = text;
 		this.textPreprocess = new TextPreprocess();
-		this.queryPreprocess = new QueryPreprocess(this.sbm);
 		textPreprocess.preprocess(text.getContent());
-		queryPreprocess.preprocess(query.getContent(), textPreprocess);
-		this.sequenceA = text.getContent();
-		this.sequenceB = query.getContent();
 	}
 	
+	public BlastResult runQuery(Sequence query)
+	{
+		this.m_query = query;
+		this.queryPreprocess = new QueryPreprocess(this.sbm);
+		queryPreprocess.preprocess(query.getContent(), this.textPreprocess);
+		return extendHSPs(m_text.getContent(), m_query.getContent());
+	}
 	
 
 	private TextPreprocess textPreprocess;
 	private QueryPreprocess queryPreprocess;
 	
 	
-	private void extendHSPs(){
+	private BlastResult extendHSPs(String text, String query){
 		String bestMatchQuery = "";
 		String bestMatchText = "";
-		String secondBestMatchQuery = "";
-		String secondBestMatchText = "";
+
 		for (String queryKey : queryPreprocess.similarWordsMap.keySet()) {
 			for ( Integer i :  queryPreprocess.similarWordsMap.get(queryKey).getQueryIndexes()) {
 				for (SimilarString similar :  queryPreprocess.similarWordsMap.get(queryKey).getSimilarStrings()) {
 					int score = similar.getPunishment();
 					for (Integer j  : similar.getIndexesInText()) {
 						int r = BlastConstants.K ;
-						while (r < sequenceB.length()-i && r < sequenceA.length() - j){
-							int newScore = sbm.score(sequenceB.charAt(i + r), sequenceA.charAt(j + r)) + score;
+						while (r < query.length()-i && r < text.length() - j){
+							int newScore = sbm.score(query.charAt(i + r), text.charAt(j + r)) + score;
 							if ( newScore >= BlastConstants.HSP_T){
 								score = newScore;
 								r++;
 							}
 							else break;
 						}
-						String queryCurrent = sequenceB.substring(i, i + r);
-						String textCurrent = sequenceA.substring(j, j + r);
+						String queryCurrent = query.substring(i, i + r);
+						String textCurrent = text.substring(j, j + r);
 						
 						if (queryCurrent.length() > bestMatchQuery.length())
 						{
-							secondBestMatchQuery = bestMatchQuery;
 							bestMatchQuery = queryCurrent;
-							
-							secondBestMatchText = bestMatchText;
 							bestMatchText = textCurrent;
-						}
-						else if (queryCurrent.length() > secondBestMatchQuery.length())
-						{
-							secondBestMatchQuery = queryCurrent;
-							secondBestMatchText = textCurrent;
 						}
 						
 					}
@@ -71,29 +70,15 @@ public class BlastAlignment extends Alignment{
 			}
 		}
 		
-		System.out.println("Best:\n" + bestMatchQuery +"\n"+ bestMatchText);
-		System.exit(0);
+		return new BlastResult(	new Sequence(m_text.getName(), bestMatchText),
+								new Sequence(m_query.getName(), bestMatchQuery));
+		//System.out.println("Best:\n" + bestMatchQuery +"\n"+ bestMatchText);
+		
 		
 	}
 	
-	//private void extendWord
-	
-	@Override
-	public void printResult()
-	{
-		extendHSPs();
-	}
-	
-	
-	@Override
-	protected Cell calculateEndCell() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	protected void ij_operation(int i, int j) {
-		// TODO Auto-generated method stub
-		
-	}
+	
+	
+
 }

@@ -23,4 +23,9 @@ public class Sequence {
 	public void setContent(String content) {
 		this.content = content;
 	}
+	
+	@Override
+	public String toString() {
+		return ">" + name +"\n" + content;
+	}
 }

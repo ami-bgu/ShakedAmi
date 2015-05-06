@@ -8,10 +8,7 @@ import java.util.Set;
 
 public class TextPreprocess {
 	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
-	}
 
 	protected Map<String,List<Integer>> textMap = new HashMap<>();
 

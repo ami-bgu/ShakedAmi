@@ -1,9 +1,4 @@
 import edu.tabio.Configuration.SubstitutionMatrix;
-import edu.tabio.SequenceAlignments.AffineGapGlobalAlignment;
-import edu.tabio.SequenceAlignments.AffineGapLocalAlignment;
-import edu.tabio.SequenceAlignments.Alignment;
-import edu.tabio.SequenceAlignments.GlobalAlignment;
-import edu.tabio.SequenceAlignments.LocalAlignment;
 import edu.tabio.SequenceAlignments.SequenceAligner;
 import edu.tabio.blast.BlastAlignment;
 
@@ -28,7 +23,7 @@ public class Main {
 		
 		SubstitutionMatrix subsMat = new SubstitutionMatrix(scoreFile);
 
-		Alignment alignment = new BlastAlignment(subsMat);
+		BlastAlignment alignment = new BlastAlignment(subsMat);
 		SequenceAligner aligner = new SequenceAligner(alignment);
 		aligner.allAgainstAll(fastas[0], fastas[1]);
 		/*

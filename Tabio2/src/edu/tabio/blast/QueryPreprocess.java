@@ -42,8 +42,7 @@ public class QueryPreprocess {
 			
 			
 		}
-		printMap();
-		//System.exit(0);
+		if (BlastConstants.DEBUG)	printMap();
 	}
 	
 	

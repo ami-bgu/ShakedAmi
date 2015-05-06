@@ -18,7 +18,7 @@ public class SimilarString {
 	
 	@Override
 	public String toString() {
-		return "\n\t"+str+ ", punishment: " + punishment +  ", indexes: " + indexesInText;
+		return "\n\t"+str+ ", replace-cost: " + punishment +  ", indexes: " + indexesInText;
 		//return str+", ";
 	}
 

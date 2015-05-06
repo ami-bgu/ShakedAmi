@@ -5,18 +5,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.tabio.Model.BlastResult;
 import edu.tabio.Model.Sequence;
+import edu.tabio.blast.BlastAlignment;
 
 
 public class SequenceAligner {
 
-	public SequenceAligner(Alignment alignment) {
+	public SequenceAligner(BlastAlignment alignment) {
 		this.alignment = alignment;
 	}
 		
-	private List<Sequence> fastaList1;
-	private List<Sequence> fastaList2;
-	private Alignment alignment;
+	private List<Sequence> textSequences;
+	private List<Sequence> querySequences;
+	private BlastAlignment alignment;
 	
 	private List<Sequence> readFasta(String filename)
 	{
@@ -50,24 +52,43 @@ public class SequenceAligner {
 	
 	
 	//recieves filenames
-	public void allAgainstAll(String fasta1, String fasta2) {
-		fastaList1 = readFasta(fasta1);
-		fastaList2 = readFasta(fasta2);
+	public void allAgainstAll(String textsFilename, String queryFilename) {
+		textSequences = readFasta(textsFilename);
+		querySequences = readFasta(queryFilename);
+		
 		
 		long startTime = System.currentTimeMillis();
-		for (Sequence seq1 : fastaList1) {
-			for (Sequence seq2 : fastaList2) {
-				alignment.SetSequences(seq1, seq2);
-				alignment.printResult();
+		
+
+		for (Sequence text : textSequences) {
+			alignment.setText(text);
+			BlastResult firstBestResult = null;
+			BlastResult secondBestResult = null;
+			for (Sequence query : querySequences) {
+				BlastResult latestResult = alignment.runQuery(query);
+				if (firstBestResult == null || latestResult.getLength() > firstBestResult.getLength())
+				{
+					secondBestResult = firstBestResult;
+					firstBestResult = latestResult;
+				}
+				else if (secondBestResult == null || latestResult.getLength() > secondBestResult.getLength())
+				{
+					secondBestResult = latestResult;
+				}
 			}
+			System.out.println("===================================================================================");
+			System.out.println("1st best Result is:\n" + firstBestResult + "\n***\n2nd best result is:\n" + secondBestResult);
 		}
+		
+		System.out.println("===================================================================================");
 		System.out.println("All Against All Took: "+ (System.currentTimeMillis() - startTime) + " ms");
+
 	}
 	
 	//recieves sequences
-	public void oneAgainstOne(String seq1, String seq2) {
-		alignment.SetSequences(new Sequence("", seq1), new Sequence("", seq2));
-		alignment.printResult();
+	public void oneAgainstOne(String text, String query) {
+		alignment.setText(new Sequence("", text));
+		alignment.runQuery(new Sequence("", query));
 	}
 	
 }
