@@ -41,7 +41,7 @@ public class BlastAlignment extends Alignment{
 					for (Integer j  : similar.getIndexesInText()) {
 						int r = BlastConstants.K ;
 						while (r < sequenceB.length()-i && r < sequenceA.length() - j){
-							int newScore = sbm.score(sequenceB.charAt(i + r), sequenceA.charAt(j + r));
+							int newScore = sbm.score(sequenceB.charAt(i + r), sequenceA.charAt(j + r)) + score;
 							if ( newScore >= BlastConstants.HSP_T){
 								score = newScore;
 								r++;
