@@ -1,6 +1,8 @@
 import edu.tabio.Configuration.SubstitutionMatrix;
 import edu.tabio.SequenceAlignments.SequenceAligner;
+import edu.tabio.SequenceAlignments.SequenceAlignerConstantTester;
 import edu.tabio.blast.BlastAlignment;
+import edu.tabio.blast.BlastConstants;
 
 
 public class Main {
@@ -24,7 +26,12 @@ public class Main {
 		SubstitutionMatrix subsMat = new SubstitutionMatrix(scoreFile);
 
 		BlastAlignment alignment = new BlastAlignment(subsMat);
-		SequenceAligner aligner = new SequenceAligner(alignment);
+		//SequenceAligner aligner = new SequenceAligner(alignment);
+		SequenceAligner aligner;
+		
+		if (BlastConstants.IS_CONSTANTS_TEST)	aligner = new SequenceAlignerConstantTester(alignment);
+		else									aligner = new SequenceAligner(alignment);
+
 		aligner.allAgainstAll(fastas[0], fastas[1]);
 		/*
 		aligner.oneAgainstOne(	"GCTTATACCA",

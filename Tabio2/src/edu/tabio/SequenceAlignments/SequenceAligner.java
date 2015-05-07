@@ -16,11 +16,11 @@ public class SequenceAligner {
 		this.alignment = alignment;
 	}
 		
-	private List<Sequence> textSequences;
-	private List<Sequence> querySequences;
-	private BlastAlignment alignment;
+	protected List<Sequence> textSequences;
+	protected List<Sequence> querySequences;
+	protected BlastAlignment alignment;
 	
-	private List<Sequence> readFasta(String filename)
+	protected List<Sequence> readFasta(String filename)
 	{
 		//System.out.println(filename);
 		List<Sequence> sequencesList = new ArrayList<>();
